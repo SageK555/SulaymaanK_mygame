@@ -48,11 +48,24 @@ class Player(Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
-
+    def collide_with_stuff(self, group, kill):
+        hits = pg.sprite.spritecollide(self, group, kill)
+        if hits:
+            if str(hits[0].__class__.__name__) == "Powerup":
+                print("I hit a powerup")  
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y +=  self.vy * self.game.dt
+    # reverse order to fix collision issues
+
+        self.collide_with_stuff(self.game.all_powerups, True)
+
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        
+        self.rect.y = self.y
+        self.collide_with_walls('y')
 
 
 class Mob(Sprite):
@@ -63,20 +76,24 @@ class Mob(Sprite):
         self.image = pg.Surface((32,32))
         self.rect = self.image.get_rect()
         self.image.fill(GREEN)
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
         self.category = random.choice([0,1])
     def update(self):
 
         # moving towards the side of the screen
         self.rect.x += self.speed
+
+        hits =pg.sprite
         # when it hits the side of the screen, it will move down
-        if self.rect.x > WIDTH or self.rect.left < 0:
-            #print("off the screen")
-            print(self.speed)
-            print(self.rect.x)
+        if self.rect.right > WIDTH or self.rect.left < 0:
+            # print("off the screen...")
             self.speed *= -1
             self.rect.y += 32
+        # elif self.rect.colliderect(self.game.player):
+        #     self.speed *= -1
+        # elif self.rect.colliderect(self):
+        #     self.speed *= -1
         
         # then it will move towards the other sode of the screen
         # if it gets to the bottom, then it move t the top of the screen
@@ -84,16 +101,25 @@ class Mob(Sprite):
 
 class Wall(Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites
         self.game = game
+        self.groups = game.all_sprites, game.all_walls
         Sprite.__init__(self, self.groups)
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
         self.image.fill(BLUE)
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
     def update(self):
         pass
 
-class PowerUP: 
+class Powerup: 
+    def __init__(self, game, x, y):
+        self.game = game
+        self.groups = game.all_sprites, game.all_powerups
+        Sprite.__init__(self, self.groups)
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.rect = self.image.get_rect()
+        self.image.fill(ORANGE)
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
