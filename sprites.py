@@ -19,6 +19,7 @@ class Player(Sprite):
         self.y = y * TILESIZE
         self.speed = 10
         self.vx, self.vy = 0, 0
+        self.coins = 0
     def get_keys(self):
         keys = pg.keys.get_pressed()
         if keys[pg.K_w]:
@@ -31,10 +32,10 @@ class Player(Sprite):
             self.vy +=self.speed
     def collide_with_walls(self, dir):
         if dir == 'x':
-            hits = pg.sprite.sprite.spritecollide(self, self.game.walls, False)
+            hits = pg.sprite.sprite.spritecollide(self, self.game.all_walls, False)
             if hits:
                 if self.vx > 0:
-                    self.x = hits [0].rec.left - self.rect.width
+                    self.x = hits [0].rect.left - self.rect.width
                 if self.vx < 0:
                     self.x = hits[0].rect.right
                 self.vx = 0
@@ -43,7 +44,7 @@ class Player(Sprite):
             hits = pg.sprite.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vy > 0:
-                    self.y = hits [0].rec.top - self.rect.height
+                    self.y = hits [0].rect.top - self.rect.height
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
                 self.vy = 0
@@ -52,7 +53,11 @@ class Player(Sprite):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
             if str(hits[0].__class__.__name__) == "Powerup":
-                print("I hit a powerup")  
+                print("I hit a powerup")
+                self.speed =+ 5
+                if str(hits[0].__class__.__name__) == "Coin":
+                    print("i hit a coin...")
+                    self.coins += 1
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
@@ -60,6 +65,7 @@ class Player(Sprite):
     # reverse order to fix collision issues
 
         self.collide_with_stuff(self.game.all_powerups, True)
+        self.collide_with_stuff(self.game.all_coins, True)
 
         self.rect.x = self.x
         self.collide_with_walls('x')
@@ -69,8 +75,9 @@ class Player(Sprite):
 
 
 class Mob(Sprite):
-    def __init__(self, x, y):
-        self.groups = game.all_sprites
+    def __init__(self, game, x, y):
+        self.game = game
+        self.groups = game.all_sprites, game.all_walls
         Sprite.__init__(self, self.groups)
         self.game = game.all_sprites
         self.image = pg.Surface((32,32))
@@ -120,6 +127,17 @@ class Powerup:
         Sprite.__init__(self, self.groups)
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
-        self.image.fill(ORANGE)
+        self.image.fill(PINK)
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Coin(Sprite):
+    def __init__(self, game, x, y):
+        self.game = game
+        self.groups = game.all_sprites, game.all_coins
+        Sprite.__init__(self, self.groups)
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.rect = self.image.get_rect()
+        self.image.fill(YELLOW)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
