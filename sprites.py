@@ -5,6 +5,8 @@ from pygame.sprite import Sprite
 from settings import *
 import random
 
+vec = pg.math.Vector2
+
 class Player(Sprite):
     def __init__(self, game, x, y):
         self.group = game.all_sprites
@@ -15,6 +17,13 @@ class Player(Sprite):
         self.image.fill(RED)
         # self.rect.x = x
         # self.rect.y = y
+        self.pos = vec(x, y)
+        self.vel = vec(0,0)
+        self.acc = vec(0,0)
+        self.x = self.pos.x
+        self.y = self.pos.y
+        self.speed = 10
+        #self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.speed = 10
@@ -30,6 +39,9 @@ class Player(Sprite):
             self.vy +=self.speed
         if keys[pg.K_d]:
             self.vy +=self.speed
+        if keys[pg.K_SPACE]:
+            self.jump()
+            print("trying to jump")
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.sprite.spritecollide(self, self.game.all_walls, False)
@@ -58,11 +70,14 @@ class Player(Sprite):
                 if str(hits[0].__class__.__name__) == "Coin":
                     print("i hit a coin...")
                     self.coins += 1
+    def jump(self):
+        self.vy
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y +=  self.vy * self.game.dt
     # reverse order to fix collision issues
+
 
         self.collide_with_stuff(self.game.all_powerups, True)
         self.collide_with_stuff(self.game.all_coins, True)

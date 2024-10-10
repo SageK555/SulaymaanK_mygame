@@ -6,8 +6,18 @@ from settings import *
 from sprites import *
 from tilemap import *
 from os import path
-from random import randint
 
+'''
+Elavator pitch: I want to make a game that is a sidescroller boss-rush type game where your goal is to beat
+all the bosses as fast as possible with nothing but a gun and a dash ability
+
+GOALS: Beat all bosses within certain time limit
+RULES: You can only take 3 hits, you can charge your gunshot to increase damage, you can equip 3 different guns (Shotgun, minigun, and revolver the starting weapon)
+FEEDBACK: Charge meter for gun, 3 hearts (can only take 3 hits)
+FREEDOM: You have x and y, charge gun, shoot, and dash
+
+ALPHA GOAL: Add x and y movement, gun, chargeshot, dash, and tutorial boss
+'''
 # created a game class to instantiate later
 # it will have all the necessary parts to run the game
 # each class stands for 1 block
