@@ -39,9 +39,21 @@ class Player(Sprite):
             self.vy +=self.speed
         if keys[pg.K_d]:
             self.vy +=self.speed
-        if keys[pg.K_SPACE]:
-            self.jump()
-            print("trying to jump")
+        #if keys[pg.K_SPACE]:
+            #self.jump()
+            #print("trying to jump")
+        if keys[pg.K_LSHIFT]:
+            self.dash()
+            print("trying to dash")
+# Shooting aim
+        if keys[pg.K_u]:
+            self.vy
+        if keys[pg.K_h]:
+            self.vy
+        if keys[pg.K_j]:
+            self.vy
+        if keys[pg.K_k]:
+            self.vy
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.sprite.spritecollide(self, self.game.all_walls, False)
@@ -70,12 +82,14 @@ class Player(Sprite):
                 if str(hits[0].__class__.__name__) == "Coin":
                     print("i hit a coin...")
                     self.coins += 1
-    def jump(self):
+    def dash(self):
         self.vy
+        self.vx
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y +=  self.vy * self.game.dt
+    
     # reverse order to fix collision issues
 
 
@@ -156,3 +170,5 @@ class Coin(Sprite):
         self.image.fill(YELLOW)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Life(Sprite):
