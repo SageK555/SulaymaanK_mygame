@@ -1,8 +1,14 @@
 WIDTH = 800
 HEIGHT = 600
+#New screen size
+BIGWIDTH = 1025
+BIGHEIGHT = 800
 
 FPS = 30
+
+#How big the pixels are
 TILESIZE = 32
+BIGTILESIZE = 256
 
 #Colors
 BLACK = (0,0,0)

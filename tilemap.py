@@ -1,4 +1,4 @@
-import pygame as og
+import pygame as pg
 from settings import *
 
 
@@ -8,7 +8,7 @@ class Map:
         with open(filename, 'rt') as f:
             for line in f:
             # for loop 
-                self.data.apped(line.strip()) # <- anything not a number, we get rid of it (line.strip)
+                self.data.append(line.strip()) # <- anything not a number, we get rid of it (line.strip)
                 #taking the empety list and putting stuff init - wha append does
         self.tilewidth = len(self.data[0])
         # the length of the entiire level is equal the length of level 0
