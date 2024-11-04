@@ -148,7 +148,7 @@ class Mob(Sprite):
         hits =pg.sprite
         # when it hits the side of the screen, it will move down
         if self.rect.right > WIDTH or self.rect.left < 0:
-            # print("off the screen...")
+            print("off the screen...")
             self.speed *= -1
             self.rect.y += 32
         #elif self.rect.colliderect(self.game.player):
@@ -207,16 +207,50 @@ class LifeBAR(Sprite):
         self.image.fill(RED)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
         
 
 class Boss(Sprite):
+    #initialized into game
     def __init__(self, game, x, y):
         self.game = game
         self.groups = game.all_sprites, game.all_boss
         Sprite.__init__(self, self.groups)
+        #size of mob
         self.image = pg.Surface((BIGTILESIZE, BIGTILESIZE))
         self.rect = self.image.get_rect()
         self.image.fill(BLACK)
         self.rect.x = x * BIGTILESIZE
         self.rect.y = y * BIGTILESIZE
+        self.speed = 5
+
+#adding collide with bullet in beta release
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
+            if hits:
+                if self.vx > 0:
+                    self.x = hits[0].rect.left - TILESIZE
+                if self.vx < 0:
+                    self.x = hits[0].rect.right
+                self.vx = 0
+                self.rect.x = self.x
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
+            if hits:
+                if self.vy > 0:
+                    self.y = hits[0].rect.top - TILESIZE
+                if self.vy < 0:
+                    self.y = hits[0].rect.bottom
+                self.vy = 0
+                self.rect.y = self.y
+#If level change then color of mobs, boss, will change
+    def level_change(self, game):
+        if (self.game_folder, 'level1.txt'):
+            self.image.fill(GREEN)
+        #if (self.game_folder, 'level'):
+        
+        
+    
+
         

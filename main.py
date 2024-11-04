@@ -41,7 +41,7 @@ class Game:
     def load_data(self):
         self.game_folder = path.dirname(__file__)
         self.img_folder = path.join(self.game_folder, 'images' )
-        self.map = Map(path.join(self.game_folder, 'level1.txt'))
+        self.map = Map(path.join(self.game_folder, 'levelALPHA.txt'))
 
     def new(self):
         self.load_data()
@@ -63,6 +63,7 @@ class Game:
 
         # takes map.data and parses it using enumerate so that we can assign x and y values to 
         # object instances.
+        # Map key
         for row, tiles in enumerate(self.map.data):
             print(row)
             for col, tile in enumerate(tiles):
